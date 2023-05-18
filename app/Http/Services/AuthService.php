@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Models\User;
 use Elliptic\EC;
+use Illuminate\Support\Facades\Http;
 use kornrunner\Keccak;
 use Illuminate\Support\Str;
 
@@ -38,5 +39,17 @@ class AuthService
     public function createUser(string $address)
     {
         return User::create(['address' => $address]);
+    }
+
+
+    public function getUserNfts() {
+        return Http::withHeaders([
+            'Accept' => 'application/json',
+            'X-API-Key' => env('MORALIS_API_KEY'),
+        ])->get('https://deep-index.moralis.io/api/v2/' . Auth::user()->address . '/nft', [
+            'chain' => 'eth',
+            'format' => 'decimal',
+            'media_items' => false,
+        ]);
     }
 }
