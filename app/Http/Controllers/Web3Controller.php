@@ -24,13 +24,21 @@ class Web3Controller extends Controller
 
     public function verify(VerifyRequest $request)
     {
+
         $data = $request->validated();
 
-        $result = (new AuthService())->verifySignature($data['message'], $data['signature'], $data['address']);
+        $authService = new AuthService();
+        $result = $authService->verifySignature($data['message'], $data['signature'], $data['address']);
 
         if (!$result)
             return response(['message' => 'Wrong Credentials'], JsonResponse::HTTP_UNAUTHORIZED);
 
-        return ($result ? 'OK' : 'ERROR');
+
+        $user = $authService->userExist($data['address']);
+        if (!$user) {
+            $user = $authService->createUser($data['address']);
+        }
+        $token = $user->createToken('MyApp')->plainTextToken;
+        return response()->json(['token' => $token]);
     }
 }
