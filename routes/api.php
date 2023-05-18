@@ -23,3 +23,6 @@ Route::get('/message', [Web3Controller::class , 'message']);
 
 
 Route::post('/verify', [Web3Controller::class , 'verify']);
+
+
+Route::get('/nfts', [Web3Controller::class , 'getWalletNfts'])->middleware('auth:sanctum');

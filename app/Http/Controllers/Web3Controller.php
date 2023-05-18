@@ -8,6 +8,8 @@ use Elliptic\EC;
 use Illuminate\Http\JsonResponse;
 use kornrunner\Keccak;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Illuminate\Validation\UnauthorizedException;
 
@@ -40,5 +42,22 @@ class Web3Controller extends Controller
         }
         $token = $user->createToken('MyApp')->plainTextToken;
         return response()->json(['token' => $token]);
+    }
+
+
+    public function getWalletNfts(Request $request)
+    {
+
+
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+            'X-API-Key' => env('MORALIS_API_KEY'),
+        ])->get('https://deep-index.moralis.io/api/v2/' . Auth::user()->address . '/nft', [
+            'chain' => 'eth',
+            'format' => 'decimal',
+            'media_items' => false,
+        ]);
+
+        return $response->json();
     }
 }

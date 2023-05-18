@@ -5,6 +5,7 @@ namespace App\Http\Services;
 use App\Models\User;
 use Elliptic\EC;
 use kornrunner\Keccak;
+use Illuminate\Support\Str;
 
 class AuthService
 {
