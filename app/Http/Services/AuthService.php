@@ -7,7 +7,7 @@ use Elliptic\EC;
 use Illuminate\Support\Facades\Http;
 use kornrunner\Keccak;
 use Illuminate\Support\Str;
-
+use Illuminate\Support\Facades\Auth;
 class AuthService
 {
 
